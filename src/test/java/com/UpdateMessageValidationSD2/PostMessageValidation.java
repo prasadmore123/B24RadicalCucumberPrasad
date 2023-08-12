@@ -1,4 +1,4 @@
-package com.PostMessageValidationSD;
+package com.UpdateMessageValidationSD2;
 
 import org.junit.Assert;
 import io.cucumber.java.en.Given;
@@ -15,24 +15,23 @@ public class PostMessageValidation {
 
 	
 	Response response = null;
-	String id = null;
 	
-	@Given("post the data to create user")
-	public void post_the_data_to_create_user() {
+	@Given("update the data to create user")
+	public void update_the_data_to_create_user() {
 		
 		response = RestAssured
 				.given()
 				.relaxedHTTPSValidation()
 				.accept(ContentType.JSON)
 				.body("{\r\n"
-						+ "    \"name\": \"user1112\",\r\n"
+						+ "    \"name\": \"user222\",\r\n"
 						+ "    \"job\": \"QA leader\",\r\n"
 						+ "    \"mob\": \"122\",\r\n"
 						+ "    \"dept\": \"QA-Automation\",\r\n"
 						+ "    \"location\": \"Pune\"\r\n"
 						+ "}\r\n"
 						+ "")
-				.post("https://reqres.in/api/users");
+				.put("https://reqres.in/api/users");
 	}
 	
 	@Then("validate status code is {string}")
@@ -52,21 +51,20 @@ public class PostMessageValidation {
 	    Assert.assertTrue(id > 0 );
 	}
 	
-	@Given("post the data to create user from file")
-	public void post_the_data_to_create_user_from_file() {
-		File file = new File("src/test/java/com/PostMessageValidationSD/CreateUser.json");
+	@Given("Update the data to create user from file")
+	public void Update_the_data_to_create_user_from_file() {
+		File file = new File("src/test/java/com/UpdateMessageValidationSD/CreateUser.json");
 		response = RestAssured
 				.given()
 				.relaxedHTTPSValidation()
 				.accept(ContentType.JSON)
 				.body(file)
-				.post("https://reqres.in/api/users");
+				.put("https://reqres.in/api/users");
 	}
 	
-	
-	@Given("post the data to create user from file with updated fields")
-	public void post_the_data_to_create_user_from_file_with_updated_fields() throws IOException {
-		String dataString = new String(Files.readAllBytes(Paths.get("src/test/java/com/PostMessageValidationSD/CreateUser.json")));
+	@Given("Update the data to create user from file with updated name")
+	public void Update_the_data_to_create_user_from_file_with_updated_name() throws IOException {
+		String dataString = new String(Files.readAllBytes(Paths.get("src/test/java/com/UpdateMessageValidationSD/CreateUser.json")));
 		JSONObject jsonObject = new JSONObject(dataString);
 		double randomNum = Math.random();
 		jsonObject.put("name", "userNewName"+randomNum);
@@ -76,25 +74,8 @@ public class PostMessageValidation {
 				.relaxedHTTPSValidation()
 				.accept(ContentType.JSON)
 				.body(finalDataString)
-				.post("https://reqres.in/api/users");
+				.put("https://reqres.in/api/users");
 		response.then().log().all();
-	}
-	
-	@Given("delete the user from system")
-	public void delete_the_user_from_system() {
-		System.out.println("======== Deleting user ============="+ id);
-		response = RestAssured
-				.given()
-				.relaxedHTTPSValidation()
-				.accept(ContentType.JSON)
-				.delete("https://reqres.in/api/users/"+id);
-		
-	}
-	
-	
-	@Then("validate user deleted from system")
-	public void validate_user_deleted_from_system() {
-		Assert.assertTrue(true);
 	}
 					
 }
