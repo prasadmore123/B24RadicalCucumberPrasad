@@ -42,10 +42,10 @@ public class GetValidation_StepDef {
 	
 	@Then("validate value for attribute {string} is {string} present in response")
 	public void validate_value_for_attribute_is_present_in_response(String str1, String expValue) {
-		
 		List<Object> allItem = response.getBody().jsonPath().getList("books."+str1);
 		System.out.println("==="+allItem.toString());
 		Assert.assertTrue(allItem.contains(expValue));
 		
 	}
+	
 }
